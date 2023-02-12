@@ -1,6 +1,6 @@
-﻿using SSOCenter.Models;
+﻿using Framework.Models;
 
-namespace SSOCenter.Util
+namespace Framework.Util
 {
     /// <summary>
     /// JWT服务接口

@@ -1,12 +1,8 @@
+using Framework.Models;
+using Framework.Util;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Builder.Extensions;
 using Microsoft.IdentityModel.Tokens;
-using Org.BouncyCastle.Asn1.Ocsp;
-using RSAExtensions;
-using SSOCenter.Util;
-using System.Security.Cryptography;
 using System.Text;
-using WebOne.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -63,7 +59,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 var app = builder.Build();
 
-WebOne.Utils.ServiceLocator.Instance = app.Services; //用于手动获取DI对象
+//WebOne.Utils.ServiceLocator.Instance = app.Services; //用于手动获取DI对象
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

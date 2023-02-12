@@ -1,10 +1,10 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Framework.Models;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using SSOCenter.Models;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
-namespace SSOCenter.Util
+namespace Framework.Util
 {
     public abstract class JWTBaseService : IJWTService
     {
@@ -57,9 +57,9 @@ namespace SSOCenter.Util
             string key = $"AuthCode:{code}";
             string appCachekey = $"AuthCodeClientId:{code}";
             //缓存授权码
-            _cachelper.StringSet<CurrentUserModel>(key, currentUserModel, TimeSpan.FromMinutes(10));
+            _cachelper.StringSet(key, currentUserModel, TimeSpan.FromMinutes(10));
             //缓存授权码是哪个应用的
-            _cachelper.StringSet<string>(appCachekey, appHSSetting.clientId, TimeSpan.FromMinutes(10));
+            _cachelper.StringSet(appCachekey, appHSSetting.clientId, TimeSpan.FromMinutes(10));
             //创建全局会话
             string sessionCode = $"SessionCode:{code}";
             SessionCodeUser sessionCodeUser = new SessionCodeUser
@@ -67,14 +67,14 @@ namespace SSOCenter.Util
                 expiresTime = DateTime.Now.AddHours(1),
                 currentUser = currentUserModel
             };
-            _cachelper.StringSet<CurrentUserModel>(sessionCode, currentUserModel, TimeSpan.FromDays(1));
+            _cachelper.StringSet(sessionCode, currentUserModel, TimeSpan.FromDays(1));
             //全局会话过期时间
             string sessionExpiryKey = $"SessionExpiryKey:{code}";
             DateTime sessionExpirTime = DateTime.Now.AddDays(1);
-            _cachelper.StringSet<DateTime>(sessionExpiryKey, sessionExpirTime, TimeSpan.FromDays(1));
+            _cachelper.StringSet(sessionExpiryKey, sessionExpirTime, TimeSpan.FromDays(1));
             Console.WriteLine($"登录成功，全局会话code:{code}");
             //缓存授权码取token时最长的有效时间
-            _cachelper.StringSet<DateTime>($"AuthCodeSessionTime:{code}", sessionExpirTime, TimeSpan.FromDays(1));
+            _cachelper.StringSet($"AuthCodeSessionTime:{code}", sessionExpirTime, TimeSpan.FromDays(1));
 
             result.SetSuccess(code);
             return result;
@@ -111,13 +111,13 @@ namespace SSOCenter.Util
             string appCachekey = $"AuthCodeClientId:{code}";
 
             //缓存授权码
-            _cachelper.StringSet<CurrentUserModel>(key, currentUserModel, TimeSpan.FromMinutes(10));
+            _cachelper.StringSet(key, currentUserModel, TimeSpan.FromMinutes(10));
             //缓存授权码是哪个应用的
-            _cachelper.StringSet<string>(appCachekey, appHSSetting.clientId, TimeSpan.FromMinutes(10));
+            _cachelper.StringSet(appCachekey, appHSSetting.clientId, TimeSpan.FromMinutes(10));
 
             //缓存授权码取token时最长的有效时间
             DateTime expirTime = _cachelper.StringGet<DateTime>($"SessionExpiryKey:{sessionCode}");
-            _cachelper.StringSet<DateTime>($"AuthCodeSessionTime:{code}", expirTime, expirTime - DateTime.Now);
+            _cachelper.StringSet($"AuthCodeSessionTime:{code}", expirTime, expirTime - DateTime.Now);
 
             result.SetSuccess(code);
             return result;
@@ -136,7 +136,7 @@ namespace SSOCenter.Util
             CurrentUserModel currentUserModel = _cachelper.StringGet<CurrentUserModel>($"RefreshToken:{refreshToken}");
             if (currentUserModel == null)
             {
-                return String.Empty;
+                return string.Empty;
             }
             //刷新token过期时间
             DateTime refreshTokenExpiry = _cachelper.StringGet<DateTime>($"RefreshTokenExpiry:{refreshToken}");
@@ -187,11 +187,11 @@ namespace SSOCenter.Util
                 tokenExpiryTime = sessionExpiryTime;
             }
             //获取访问token
-            string token = this.IssueToken(currentUserModel, clientId, (tokenExpiryTime - DateTime.Now).TotalSeconds);
+            string token = IssueToken(currentUserModel, clientId, (tokenExpiryTime - DateTime.Now).TotalSeconds);
 
 
             TimeSpan refreshTokenExpiry;
-            if (sessionExpiryTime != default(DateTime))
+            if (sessionExpiryTime != default)
             {
                 refreshTokenExpiry = sessionExpiryTime - DateTime.Now;
             }
@@ -200,7 +200,7 @@ namespace SSOCenter.Util
                 refreshTokenExpiry = TimeSpan.FromSeconds(60 * 60 * 24);//默认24小时
             }
             //获取刷新token
-            string refreshToken = this.IssueToken(currentUserModel, clientId, refreshTokenExpiry.TotalSeconds);
+            string refreshToken = IssueToken(currentUserModel, clientId, refreshTokenExpiry.TotalSeconds);
             //缓存刷新token
             _cachelper.StringSet($"RefreshToken:{refreshToken}", currentUserModel, refreshTokenExpiry);
             //缓存刷新token过期时间

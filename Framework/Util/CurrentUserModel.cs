@@ -1,4 +1,4 @@
-﻿namespace SSOCenter.Util
+﻿namespace Framework.Util
 {
     /// <summary>
     /// 当前用户信息

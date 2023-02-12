@@ -3,8 +3,11 @@ using Framework.Util;
 using Microsoft.AspNetCore.Mvc;
 using System.Text;
 
-namespace WebOne.Controllers
+namespace WebTwo.Controllers
 {
+    /// <summary>
+    /// 用户信息
+    /// </summary>
     public class AccountController : Controller
     {
         private IHttpClientFactory _httpClientFactory;
@@ -16,7 +19,7 @@ namespace WebOne.Controllers
         }
 
         /// <summary>
-        /// 获取用户信息，接口需要进行权限校验
+        /// 获取用户信息,有权限校验
         /// </summary>
         /// <returns></returns>
         [TypeFilter(typeof(MyAuthorize))]
@@ -26,7 +29,6 @@ namespace WebOne.Controllers
             ResponseModel<UserDTO> user = new ResponseModel<UserDTO>();
             return user;
         }
-
         /// <summary>
         /// 登录成功回调
         /// </summary>
@@ -35,19 +37,14 @@ namespace WebOne.Controllers
         {
             return View();
         }
-
-        /// <summary>
-        /// 根据authCode获取token
-        /// </summary>
-        /// <param name="request"></param>
-        /// <returns></returns>
+        //根据authCode获取token
         [HttpPost]
         public async Task<ResponseModel<GetTokenDTO>> GetAccessCode([FromBody] GetAccessCodeRequest request)
         {
             ResponseModel<GetTokenDTO> result = new ResponseModel<GetTokenDTO>();
             //请求SSO获取 token
             var client = _httpClientFactory.CreateClient();
-            var param = new { authCode = request.authCode };
+            var param = new { request.authCode };
             string jsonData = System.Text.Json.JsonSerializer.Serialize(param);
             StringContent paramContent = new StringContent(jsonData);
 
@@ -55,7 +52,7 @@ namespace WebOne.Controllers
             var response = await client.PostAsync("https://localhost:7000/SSO/GetToken", new StringContent(jsonData, Encoding.UTF8, "application/json"));
             string resultStr = await response.Content.ReadAsStringAsync();
             result = System.Text.Json.JsonSerializer.Deserialize<ResponseModel<GetTokenDTO>>(resultStr);
-            if (result.code == 0) //成功
+            if (result.code == 0)
             {
                 //成功,缓存token到局部会话
                 string token = result.data.token;
@@ -68,7 +65,6 @@ namespace WebOne.Controllers
 
             return result;
         }
-
         /// <summary>
         /// 退出登录
         /// </summary>

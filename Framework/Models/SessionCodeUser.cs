@@ -1,6 +1,6 @@
-﻿using SSOCenter.Util;
+﻿using Framework.Util;
 
-namespace SSOCenter.Models
+namespace Framework.Models
 {
     public class SessionCodeUser
     {

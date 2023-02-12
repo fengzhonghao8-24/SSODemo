@@ -1,4 +1,4 @@
-﻿namespace WebOne.Models
+﻿namespace Framework.Models
 {
     public class UserDTO
     {

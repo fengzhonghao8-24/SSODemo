@@ -1,4 +1,4 @@
-﻿namespace SSOCenter.Models
+﻿namespace Framework.Models
 {
     /// <summary>
     /// 获取token响应结果

@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using SSOCenter.Models;
-using SSOCenter.Util;
+﻿using Framework.Models;
+using Framework.Util;
+using Microsoft.AspNetCore.Mvc;
 using System.Text;
 
 namespace SSOCenter.Controllers

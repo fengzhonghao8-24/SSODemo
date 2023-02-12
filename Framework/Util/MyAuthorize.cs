@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using SSOCenter.Util;
 
-namespace WebOne.Utils
+namespace Framework.Util
 {
     /// <summary>
     /// 拦截认证过滤器
@@ -11,7 +10,11 @@ namespace WebOne.Utils
     /// </summary>
     public class MyAuthorize : Attribute, IAuthorizationFilter
     {
-        private static Cachelper _cachelper = ServiceLocator.Instance.GetService<Cachelper>();
+        private readonly Cachelper _cachelper;
+        public MyAuthorize(Cachelper cachelper)
+        {
+            _cachelper = cachelper;
+        }
 
         public void OnAuthorization(AuthorizationFilterContext context)
         {

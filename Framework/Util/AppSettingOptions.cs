@@ -1,4 +1,4 @@
-﻿namespace SSOCenter.Util
+﻿namespace Framework.Util
 {
     /// <summary>
     /// 应用配置信息

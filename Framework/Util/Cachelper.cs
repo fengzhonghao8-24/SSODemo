@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
 
-namespace SSOCenter.Util
+namespace Framework.Util
 {
     /// <summary>
     /// 缓存帮助类-真正项目这里用redis

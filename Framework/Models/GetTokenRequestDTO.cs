@@ -1,4 +1,4 @@
-﻿namespace SSOCenter.Models
+﻿namespace Framework.Models
 {
     public class GetTokenRequestDTO
     {

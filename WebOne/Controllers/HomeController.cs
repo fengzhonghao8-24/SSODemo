@@ -1,9 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Framework.Models;
+using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
-using WebOne.Models;
 
 namespace WebOne.Controllers
 {
+    [Route("[controller]/[action]")]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;

@@ -2,7 +2,7 @@
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Cryptography;
 
-namespace SSOCenter.Util
+namespace Framework.Util
 {
     /// <summary>
     /// JWT非对称加密

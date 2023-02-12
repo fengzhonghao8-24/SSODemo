@@ -1,4 +1,4 @@
-using SSOCenter.Util;
+using Framework.Util;
 
 var builder = WebApplication.CreateBuilder(args);
 
